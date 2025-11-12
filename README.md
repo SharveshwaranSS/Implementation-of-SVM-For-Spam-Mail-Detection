@@ -8,125 +8,65 @@ To write a program to implement the SVM For Spam Mail Detection.
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-1. Import the packages.
-2. Analyse the data.
-3. Use modelselection and Countvectorizer to preditct the values.
-4. Find the accuracy and display the result.
+1. Import the necessary python packages using import statements
+2. Read the given csv file using read_csv() method and print the number of contents to be displayed using df.head().
+3. Split the dataset using train_test_split.
+4. Calculate Y_Pred and accuracy.
+5. Print all the outputs.
+6. End the Program.
 
 ## Program:
 ```
 /*
 Program to implement the SVM For Spam Mail Detection..
-Developed by: SHARVESHWARAN SS
-RegisterNumber: 212224220096
+Developed by: kirthick roshan j
+RegisterNumber:  212223040097
 */
 ```
 ```
 import pandas as pd
-import numpy as np
+
+data=pd.read_csv("spam.csv",encoding="Windows-1252")
+
+data.head()
+
+data.info()
+
+data.isnull().sum()
+
+x=data["v1"].values
+y=data["v2"].values
+
 from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0)
+
+from sklearn.feature_extraction.text import CountVectorizer
+cv=CountVectorizer()
+x_train=cv.fit_transform(x_train)
+x_test=cv.transform(x_test)
+
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-import matplotlib.pyplot as plt
-import seaborn as sns
+svc=SVC()
+svc.fit(x_train,y_train)
+y_pred=svc.predict(x_test)
+y_pred
 
-data = pd.read_csv("/content/spam.csv", encoding='ISO-8859-1')
-
-
-print("🔹 Data Head:")
-print(data.head())
-
-print("\n🔹 Data Info:")
-print(data.info())
-
-print("\n🔹 Checking for Null Values:")
-print(data.isnull().sum())
-
-
-print("\n🔹 Columns in Dataset:")
-print(data.columns)
-
-
-data = data.iloc[:, :2]
-data.columns = ['Category', 'Message']
-
-
-data['Category'] = data['Category'].map({'spam': 1, 'ham': 0})
-
-
-X = data['Message']
-y = data['Category']
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-
-vectorizer = TfidfVectorizer(stop_words='english', lowercase=True)
-X_train_tfidf = vectorizer.fit_transform(X_train)
-X_test_tfidf = vectorizer.transform(X_test)
-
-
-model = SVC(kernel='linear')  
-model.fit(X_train_tfidf, y_train)
-
-
-y_pred = model.predict(X_test_tfidf)
-
-
-accuracy = accuracy_score(y_test, y_pred)
-print(f"\n✅ Model Accuracy: {accuracy*100:.2f}%")
-
-print("\n🔹 Classification Report:")
-print(classification_report(y_test, y_pred))
-
-
-cm = confusion_matrix(y_test, y_pred)
-plt.figure(figsize=(6,4))
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
-            xticklabels=['Ham', 'Spam'],
-            yticklabels=['Ham', 'Spam'])
-plt.title("Confusion Matrix for Spam Mail Detection")
-plt.xlabel("Predicted")
-plt.ylabel("Actual")
-plt.show()
-
-
-sample_messages = [
-    "Congratulations! You have won a free $1000 Walmart gift card. Click here to claim.",
-    "Hi John, can we reschedule our meeting for tomorrow morning?",
-    "URGENT! Your account has been compromised. Please verify your password immediately!"
-]
-
-sample_tfidf = vectorizer.transform(sample_messages)
-predictions = model.predict(sample_tfidf)
-
-print("\n🔹 Sample Predictions:")
-for msg, label in zip(sample_messages, predictions):
-    print(f"Message: {msg}\nPrediction: {'Spam' if label == 1 else 'Ham'}\n")
+from sklearn import metrics
+accuracy=metrics.accuracy_score(y_test,y_pred)
+accuracy
 
 ```
 
 ## Output:
-### Data head
-![alt text](dh.png)
+![image](https://github.com/user-attachments/assets/fcb26ff0-4012-4397-b32d-ab4cd516b6c5)
 
-### Data info
-![alt text](di.png)
+![image](https://github.com/user-attachments/assets/e63a3661-e6b6-4912-90ad-5e0fd686bd4a)
 
-### Checking for Null Values
-![alt text](cnv.png)
+![image](https://github.com/user-attachments/assets/72efd40a-1ebf-4f58-89c9-1dc827f1cf5f)
 
-### Columns in Dataset
-![alt text](cd.png)
+![image](https://github.com/user-attachments/assets/2cf7e5e9-b263-43a0-a662-a7a8bf543c52)
 
-### Classification Report
-![alt text](cr.png)
-
-### Graph
-![alt text](gr.png)
-
-### Sample Predictions
-![alt text](sr.png)
+![image](https://github.com/user-attachments/assets/f7ce46cf-0eea-4c96-a16c-3d561ce721c5)
 
 ## Result:
 Thus the program to implement the SVM For Spam Mail Detection is written and verified using python programming.
